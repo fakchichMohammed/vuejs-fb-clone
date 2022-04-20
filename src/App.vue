@@ -1,26 +1,24 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Header :auth="auth" :setAuth="setAuth" />
+  <RouterView :auth="auth" :setAuth="setAuth" />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from "@vue/reactivity";
+import { RouterView, useRouter } from "vue-router";
+import Header from "./components/Header.vue";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  setup() {
+    const auth = ref({ authentified: false, user: null });
+    const router = useRouter();
+    function setAuth(user, bool) {
+      auth.value.authentified = bool;
+      auth.value.user = user;
+      !bool && router.push("/");
+    }
+    return { auth, setAuth };
+  },
+  components: { Header }
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
